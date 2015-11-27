@@ -1,0 +1,17 @@
+
+<?php
+/* PROTOTYPE PORK TRACEABILITY SYSTEM
+* Copyright © 2014 UPLB.*/
+
+
+require_once ('dbinfo.inc');
+class pigdet_functions {
+	private function connect() {
+		$link = mysqli_connect ( HOSTNAME, USERNAME, PASSWORD, DATABASE ) or die ( 'Could not connect: ' . mysqli_error () );
+		mysqli_select_db ( $link, DATABASE ) or die ( 'Could not select database' . mysql_error () );
+		return $link;
+	}
+	public function getLabel($pigid){
+		
+	}
+}

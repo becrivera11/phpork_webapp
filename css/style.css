@@ -1,0 +1,479 @@
+/** * PROTOTYPE PORK TRACEABILITY SYSTEM
+ * Copyright © 2014 UPLB. **/
+body{
+    margin: 0;
+}
+.page-header img{
+    max-width: 100%;
+}
+ #wrapper {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    top: 200px;
+    left: 25%;
+}
+html,
+body,
+#wrapper {
+    width: 100%;
+    min-height: 100%;
+}
+.closeButton {
+    cursor: pointer;
+}
+header {
+    width: 100%;
+    height: 90px;
+    float: left;
+    font-size: 46px;
+    margin-top: 10px;
+    text-align: center;
+}
+section {
+    width: 100%;
+    height: 630px;
+    float: left;
+    text-decoration: none;
+}
+.content {
+    font-family: "Lucida Console", Monaco, monospace;
+    font-size: 12px;
+    font-weight: bold;
+}
+#left {
+    width: 50%;
+    height: 300px;
+    float: left;
+}
+#lower-left {
+    width: 50%;
+    height: 200px;
+    float: left;
+    margin-top: 10px;
+}
+#display {
+    border: #C0C0C0 solid 1px;
+    border-radius: 2px;
+    width: 100%;
+    height: 100%;
+}
+
+#upper-right {
+    width: 49%;
+    height: 300px;
+    float: left;
+    margin-left: 10px;
+}
+#lower-right {
+    width: 49%;
+    height: 200px;
+    float: left;
+    margin-left: 10px;
+    margin-top: 10px;
+}
+section > fieldset > legend {
+    text-align: center;
+    font-family: "Lucida Console", Monaco, monospace;
+    font-size: 20px;
+    font-weight: bold;
+}
+footer {
+    width: 100%;
+    height: 75px;
+    float: left;
+    text-align: center;
+}
+.page-footer {
+    background-color: #b44230;
+    text-align: center;
+    color: white;
+    width: 100%;
+    bottom: 0;
+    position: absolute;
+}
+h4 a:hover{
+    text-decoration: none;
+}
+.form-horizontal.log_in {
+    width: 40%;
+    height: 20%;
+    margin-left: 30%;
+}
+.form-horizontal select {
+    margin-top: 6px;
+}
+.form-horizontal .control-label {
+    text-align: left;
+}
+#left_insert,
+#left_update {
+    float: left;
+    width: 49%;
+}
+#right_insert {
+    width: 49%;
+    float: right;
+}
+#popup {
+    display: none;
+    position: fixed;
+    width: 30%;
+    height: 50px;
+    background-color: white;
+    border: 1px solid black;
+    text-align: center;
+    padding: 2px;
+}
+#pig_det #popupUpdate {
+    display: none;
+    position: fixed;
+    width: 10%;
+    height: 50px;
+    background-color: white;
+    border: 1px solid black;
+    text-align: center;
+    padding: 2px;
+    margin-left: 23%;
+}
+#popupBoar {
+    display: none;
+    position: fixed;
+    width: 10%;
+    height: 50px;
+    background-color: white;
+    border: 1px solid black;
+    text-align: center;
+    padding: 2px;
+    margin-left: 21%;
+    margin-top: 10%;
+}
+#popupSow {
+    display: none;
+    position: fixed;
+    width: 10%;
+    height: 50px;
+    background-color: white;
+    border: 1px solid black;
+    text-align: center;
+    padding: 2px;
+    margin-left: 21%;
+    margin-top: 13%;
+}
+#popupWeight {
+    display: none;
+    position: fixed;
+    width: 10%;
+    height: 50px;
+    background-color: white;
+    border: 1px solid black;
+    text-align: center;
+    padding: 2px;
+    margin-left: 20%;
+    margin-top: 5%;
+}
+#popupMvmnt {
+    display: none;
+    position: fixed;
+    width: 10%;
+    height: 50px;
+    background-color: white;
+    border: 1px solid black;
+    text-align: center;
+    padding: 2px;
+    margin-left: 20%;
+    margin-top: 20%;
+}
+#popupSibling {
+    display: none;
+    position: fixed;
+    width: 10%;
+    height: 50px;
+    background-color: white;
+    border: 1px solid black;
+    text-align: center;
+    padding: 2px;
+    margin-left: 20%;
+    margin-top: 20%;
+}
+#message {
+    width: 150px;
+    height: 100px;
+    background-color: white;
+    text-align: left;
+    margin-left: 420px;
+    margin-top: -90px;
+    display: none;
+    padding: 2px;
+}
+#right_pane {
+    width: 300px;
+    height: 200px;
+}
+button #update_pig {
+    top: -90px;
+    left: 250px;
+    position: absolute;
+}
+table #insertTbl {
+    table-layout: fixed;
+    border-collapse: collapse;
+}
+#insertTbl td {
+    word-wrap: break-word;
+}
+#disp_rfid {
+    position: relative;
+}
+#disp_rfid a span {
+    display: none;
+    color: #FFFFFF;
+}
+#disp_rfid a:hover span {
+    display: block;
+    position: absolute;
+    width: 200px;
+    background: #aaa url(images/horses200x50.jpg);
+    height: 50px;
+    left: 100px;
+    top: -10px;
+    color: #FFFFFF;
+    padding: 0 5px;
+}
+#columnchart_values {
+    position: absolute;
+    margin: 10% 10% 10% 50%;
+    z-index: 10;
+    width: 100%;
+    height: 80%;
+    display: none;
+    top: 0;
+    left: 0;
+    border: 2px solid black;
+}
+.content {
+    padding: 20px;
+}
+#drop-files,#drop-files2 {
+    width: 100px;
+    height: 125px;
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    border: 4px dashed #b44230;
+    padding: 75px 0 0 0;
+    text-align: center;
+    font-size: 1em;
+    float: left;
+    font-weight: bold;
+    margin: 0 20px 20px 0;
+}
+#dropped-files ,#dropped-files2 {
+    position: relative;
+    width: 100%;
+    height: 125px;
+}
+#upload-button,#upload-button2 {
+    position: absolute;
+    top: 87px;
+    z-index: 9999;
+    width: 210px;
+    display: none;
+}
+#dropped-files .image,#dropped-files2 .image2 {
+    height: 100px;
+    width: 100px;
+    border: 4px solid #fff;
+    position: absolute;
+    top: 0;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    background: #fff;
+    border-radius: 4px;
+    overflow: hidden;
+}
+#upload-button .ss-upload ,#upload-button2 .ss-upload2 {
+    font-size: 0.7em;
+}
+#upload-button a,#upload-button2 a {
+    text-decoration: none;
+    color: #fff;
+    font-weight: bold;
+    box-shadow: 0 0 1000px 62px rgba(255, 255, 255, 1), inset 0 -35px 40px -10px #0A9FCA;
+    font-size: 20px;
+    padding: 10px 20px;
+    background-color: #4bc1e3;
+    border-radius: 10px;
+}
+#upload-button span,#upload-button2 span {
+    display: block;
+    width: 160px;
+    text-align: center;
+    margin: 20px 0 0 0;
+    background: white;
+    border-radius: 10px;
+    font-size: 1.1em;
+    padding: 4px 0;
+    position: relative;
+    left: -14px;
+}
+#upload-button a:hover,#upload-button2 a:hover {
+    box-shadow: 0 0 1000px 62px rgba(255, 255, 255, 1), inset 0 -5px 40px 0px #0A9FCA;
+}
+#extra-files,#extra-files2 {
+    display: none;
+    float: left;
+    position: relative;
+}
+#extra-files .number,#extra-files2 .number2 {
+    background: rgba(0, 0, 0, 0.6);
+    border-radius: 4px;
+    display: inline-block;
+    position: relative;
+    font-weight: bold;
+    color: #fff;
+    padding: 20px 30px;
+    margin: 60px 0 0 0;
+    cursor: pointer;
+    font-size: 30px;
+}
+#dropped-files #upload-button .delete,#dropped-files2 #upload-button2 .delete2 {
+    padding: 7px 6px 4px 6px;
+    border-radius: 100px;
+    background: rgba(0, 0, 0, 0.6);
+    box-shadow: none;
+    font-size: 1em;
+    margin-left: 8px;
+}
+#dropped-files #upload-button .delete:hover,#dropped-files2 #upload-button2 .delete2:hover {
+    background: rgba(0, 0, 0, 0.8);
+}
+#extra-files .number:after,#extra-files2 .number:after {
+    position: absolute;
+    content: " ";
+    top: 18px;
+    left: -40px;
+    display: block;
+    border: 20px solid;
+    border-color: transparent rgba(0, 0, 0, 0.6) transparent transparent;
+}
+#extra-files #file-list ,#extra-files2 #file-list2 {
+    display: none;
+    background: white;
+    padding: 20px 0;
+    border-radius: 5px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    width: 250px;
+    top: 100px;
+    border: 1px solid #dadada;
+    left: -10px;
+    left: -16px;
+    max-height: 220px;
+    top: 150px;
+    position: absolute;
+    color: #545454;
+}
+#file-list ul,#file-list2 ul {
+    overflow: scroll;
+    padding: 0;
+    border-top: 1px solid #dadada;
+    max-height: 200px;
+    width: 250px;
+    list-style: none;
+    border-bottom: 1px solid #dadada !important;
+}
+#file-list ul li:last-of-type,#file-list2 ul li:last-of-type {
+    border-bottom: 0 !important;
+}
+#uploaded-holder,#uploaded-holder2 {
+    width: 100%;
+    height: 200px;
+    display: none;
+    float: left;
+}
+
+#extra-files #file-list:after,
+#extra-files #file-list:before,#extra-files2 #file-list2:after,
+#extra-files2 #file-list2:before {
+    position: absolute;
+    content: " ";
+    top: -40px;
+    left: 40px;
+    display: block;
+    border: 20px solid;
+    border-color: transparent transparent #ffffff transparent;
+}
+#extra-files #file-list:before,#extra-files2 #file-list2:before {
+    border-color: transparent transparent #dadada transparent;
+    top: -41px;
+}
+#extra-files #file-list li,#extra-files2 #file-list2 li {
+    border-bottom: 1px solid #eee;
+    font-weight: bold;
+    font-size: 1.5em;
+    padding: 10px;
+}
+#loading,#loading2 {
+    display: none;
+    float: left;
+    width: 100%;
+    position: relative;
+}
+#loading-bar,#loading-bar2 {
+    width: 404px;
+    height: 40px;
+    background: #fff;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    padding: 2px;
+}
+.loading-color,.loading-color2 {
+    width: 0%;
+    height: 100%;
+    -webkit-transition: all 0.1s ease-in;
+    -moz-transition: all 0.1s ease-in;
+    -ms-transition: all 0.1s ease-in;
+    -o-transition: all 0.1s ease-in;
+    transition: all 0.1s ease-in;
+    border-radius: inherit;
+    background-color: #4edbf1;
+}
+#loading-content,#loading-content2 {
+    position: absolute;
+    top: 15px;
+    font-size: 1.2em;
+    font-weight: bold;
+    text-align: center;
+    width: 405px;
+}
+#file-name-holder {
+    width: 100%;
+}
+#file-name-holder h1 {
+    text-align: center;
+    border-bottom: 1px solid #dadada;
+    padding: 20px 0;
+    font-size: 2em;
+    margin: 0;
+}
+#uploaded-files,#uploaded-files2 {
+    background: white;
+    border-radius: 5px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    top: 100px;
+    padding: 0;
+    border: 1px solid #dadada;
+    max-height: 320px;
+    overflow: scroll;
+    color: #545454;
+}
+#uploaded-files li,#uploaded-files2 li {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    font-size: 1.5em;
+    font-weight: bold;
+    line-height: 25px;
+    color: #545454;
+}
+#uploaded-files a, #uploaded-files2 a {
+    color: #1bacbf;
+}
