@@ -1,16 +1,10 @@
 body{
     margin: 0;
 }
-.jumbotron{
-  width: 60%;
-  margin: 5% auto;
-}
-
 .container{
   margin: 0;
   padding: 0;
   width: 100%;
-  max-height: 100%;
 }
 .page-header {
   margin-top:-10px;
@@ -25,10 +19,6 @@ body{
   margin: 0;
   width: 80%;
   margin-left: 10%;
-}
-form .logout{
-  font-size: .9em;
-  margin: 0 13% 0 0;
 }
 #display {
     width: 100%;
@@ -61,13 +51,14 @@ form .logout{
   margin-bottom: 30px;
   overflow: hidden;
   counter-reset: step;
+  margin-top: 5%;
 
 }
 .step-indicator li{
     list-style-type: none;
   color: black;
   text-transform: uppercase;
-  font-size: 1em;
+  font-size: 13px;
   width: 33%;
   float: left;
   position: relative;
@@ -79,7 +70,7 @@ form .logout{
   width: 30px;
   line-height: 30px;
   display: block;
-  font-size: 1em;
+  font-size: 13px;
   color: #333;
   background: #E2E2E2;
   border-radius: 5px;
@@ -130,7 +121,7 @@ border: 3px solid #e5deb4;
 }
 #button-holder button#previous {
   
- padding: 6px 9px 6px 9px;
+ padding: 9px 15px 6px 15px;
   color: white;
   box-shadow: 1px 1px 12px 0px #9B9B9B;
   -moz-border-radius: 10px;
@@ -147,22 +138,23 @@ border: 3px solid #e5deb4;
  line-height: 1.8;
   word-wrap: normal;
   display: inline-block;
-  font-size: .8em;
+  font-size: 14px;
 }
 #button-holder #prompt{
   display: block;
   background-color: #9fcc95;
   width: 100%;
   margin-top: 35%;
-  font-size: 1em;
+  font-size: 13px;
   border-radius: 5px;
 }
  #again{
   display: block;
   background-color: #9fcc95;
-  color: #303030;
-  text-align: center;
-  font-size: 1em;
+  width: 40%;
+  margin-top: 4%;
+  margin-left: 4%;
+  font-size: 14px;
   border-radius: 5px;
 }
 #button-holder button#previous:hover {
@@ -178,7 +170,7 @@ border: 3px solid #e5deb4;
 }
 #button-holder button#next{
   margin-top: 30px; 
-  padding: 6px 5px 6px 5px;
+  padding: 9px 15px 6px 15px;
   box-shadow: 1px 1px 12px 0px #9B9B9B;
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
@@ -216,7 +208,7 @@ border: 3px solid #e5deb4;
 }
 .btn-cust-lg {
   padding: 22px 22px 21px;
-  font-size: 1.5em;
+  font-size: 16px;
 }
 .page-footer {
     background-color: #b44230;
@@ -294,23 +286,19 @@ border: 3px solid #e5deb4;
 .pig-det {
     border: 3px solid #b44230;
     text-align: center;
-    height: 220px;
+    height: 230px;
     max-height: 50%;
     margin-top: 1%;
-    word-wrap: break-word;
 }
 .pig-details{
-  height: 230px;
+  height: 250px;
   max-height: 50%;
 }
 
 .pig-det-label {
-  font-size: 1em;
+  font-size: 13px;
   font-weight: bold;
   color: #b44230;
-}
-.pig-det-details{
-  font-size: 1em;
 }
 
 .details-hr {
@@ -342,4 +330,3 @@ border: 3px solid #e5deb4;
   position: absolute;
   z-index: 99;
 }
-

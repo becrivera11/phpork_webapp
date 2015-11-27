@@ -15,11 +15,11 @@
 	<!--[if !IE]><!-->
 		<!-- <link rel="stylesheet" href="css/login.css" /> -->
 	<!-- BootStrap -->
-		<link rel="stylesheet" href="css/bootstrap.css">
-		<link rel="stylesheet" href="css/bootstrap.min.css">
-		<link rel="stylesheet" href="css/bootstrap-theme.css">
-		<link rel="stylesheet" href="css/bootstrap-theme.min.css">
-		<link rel="stylesheet" href="css/style2.css">
+		<link rel="stylesheet" href="assets/css/bootstrap.css">
+		<link rel="stylesheet" href="assets/css/bootstrap.min.css">
+		<link rel="stylesheet" href="assets/css/bootstrap-theme.css">
+		<link rel="stylesheet" href="assets/css/bootstrap-theme.min.css">
+		<link rel="stylesheet" href="css/style.css">
 		<script src="js/jquery-2.1.4.js" type="text/javascript"></script>
 		<script src="js/jquery-latest.js" type="text/javascript"></script>
 		<script src="js/jquery.min.js" type="text/javascript"></script>
@@ -41,7 +41,7 @@
 <body>
 <div class="container">
 	<div class = "page-header">
-		<img class = "img-responsive"src="css/images/letterhead.png" alt = "letterhead" >
+		<img class = "img-responsive"src="css/images/ss.png" alt = "letterhead" >
 	</div>
 	<div class="jumbotron">
     	<h2 style = "text-align: center;">Pig Display Information System<br><small> Please Log In</small> </h2>  
@@ -60,8 +60,8 @@
 				</div>
 			</div>
 			<div class="form-group">        
-				<div class="col-sm-offset-4 col-sm-10" style="align:center;">
-					<button type="submit" class="btn btn-default" >Submit</button>
+				<div class="col-sm-offset-4 col-sm-10">
+					<button type="submit" class="btn btn-default">Submit</button>
 				</div>
 			</div>
     	</form>
