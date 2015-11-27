@@ -6,7 +6,12 @@
 <!DOCTYPE HTML>
 <html lang="en"> 
 	<?php
-		require_once "connect.php";
+		session_start();
+        require_once "connect.php";
+        if(!isset($_SESSION['username']) || !isset($_SESSION['password']))
+        {
+            header("Location: login.php");
+        }
 		
 		include "inc/functions.php";
 		include "inc/pigdet.php";
@@ -27,9 +32,10 @@
 	</head>
 	<body>
 
-			<div class="page-header col-xs-12 col-sm-12 col-md-12 col-lg-12">
-				<img class="img-responsive" src="css/images/new_letterhead.png">
-			</div>
+		<div class="page-header col-xs-12 col-sm-12 col-md-12 col-lg-12">
+			<img class="img-responsive" src="css/images/new_letterhead.png">
+		</div>
+
 		<div class="container">
 			<div class="row">
                 <?php 
@@ -47,7 +53,7 @@
 
 				<div class="pig-det col-xs-3 col-sm-3 col-md-3 col-lg-3">
 					<div class="pig-image col-xs-12 col-sm-12 col-md-12 col-lg-12">
-						<img src="images/<?php echo $_GET['pig'];?>/1.jpg" style="width:100px; heigh:100px; max-width:100%;" />
+						<img src="images/<?php echo $_GET['pig'];?>/1.jpg" style="width:120px; heigh:120px; max-width:100%;" />
 					</div>
 					<span class="col-xs-12 col-sm-12 col-md-12 col-lg-12"><b><?php echo $pig->getLabel($_GET['pig']);?></b></span>
 					<span class="col-xs-12 col-sm-12 col-md-12 col-lg-12"><?php echo $pig->getRFID($_GET['pig']);?></span>
@@ -56,20 +62,32 @@
 				</div>
 
 				<div class="pig-details col-xs-9 col-sm-9 col-md-9 col-lg-9">
+					
+                    <span class="pig-det-label col-xs-2 col-sm-2 col-md-2 col-lg-2" style="text-align:left;margin-top:1%;" onmouseover="pop('edit_det')" onmouseout="hideprompt()"><a href="edit.php?pig=<?php echo $_GET['pig']?>&location=<?php echo $_GET['location'];?>&pen=<?php echo $_GET['pen'];?>&house=<?php echo $_GET['house'];?>">Edit details</a></span>
+                   
+                    <form class="form-horizontal col-xs-10 col-sm-10 col-md-10 col-lg-10"  method="post" action="logout.php" style="width:30%;float:right;">
+                        <div class="form-group logout" >
+                            <label class="control-label col-xs-6 col-sm-6" >Current User: </label>
+                            <label class="control-label col-xs-3 col-sm-3 label-default" style="text-align: center; background-color: white; border: 2px solid;"><?php echo $_SESSION['username'];?></label>
+                            <div class="col-xs-1 col-sm-1">
+                                <button type="submit" class="btn btn-primary btn-sm">Logout</button>
+                            </div>
+                        </div>
+                    </form>
+                    <br>
 					<hr class="details-hr" />
-					<span class="pig-det-label col-xs-1 col-sm-1 col-md-1 col-lg-1">FARM: </span> &nbsp; <span class="pig-det-details col-xs-3 col-sm-3 col-md-3 col-lg-3"><?php echo  $pig->getLocation($_GET['pig']);?></span> &nbsp;
-                    <span class="pig-det-label col-xs-7 col-sm-7 col-md-7 col-lg-7" style="text-align:right;"><a href="edit.php?pig=<?php echo $_GET['pig']?>&location=<?php echo $_GET['location'];?>&pen=<?php echo $_GET['pen'];?>&house=<?php echo $_GET['house'];?>">Edit details</a></span>
-
-					<hr class="details-hr" />
+                    <span class="pig-det-label col-xs-1 col-sm-1 col-md-1 col-lg-1">FARM: </span> 
+                    <span class="pig-det-details col-xs-2 col-sm-2 col-md-2 col-lg-2"><?php echo  $pig->getLocation($_GET['pig']);?></span>
 					<span class="pig-det-label col-xs-1 col-sm-1 col-md-1 col-lg-1">BIRTH: </span>
-					<span class="pig-det-details col-xs-3 col-sm-3 col-md-3 col-lg-3"><?php echo $pig->getBirthDate($_GET['pig']);?></span>
+					<span class="pig-det-details col-xs-2 col-sm-2 col-md-2 col-lg-2"><?php echo $pig->getBirthDate($_GET['pig']);?></span>
 					<span class="pig-det-label col-xs-1 col-sm-1 col-md-1 col-lg-1">AGE: </span> 
-					<span class="pig-det-details col-xs-3 col-sm-3 col-md-3 col-lg-3"><?php echo $pig->getAge($_GET['pig']);?></span>
+					<span class="pig-det-details col-xs-2 col-sm-2 col-md-2 col-lg-2"><?php echo $pig->getAge($_GET['pig']);?></span>
 					<span class="pig-det-label">WEIGHT: </span>
 					<span class="pig-det-details"><?php echo $pig->getWeight($_GET['pig']);?></span>
 					<hr class="details-hr" />
-					<span class="pig-det-label col-xs-1 col-sm-1 col-md-1 col-lg-1">PARENTS	 </span>
+					<span class="pig-det-label col-xs-1 col-sm-1 col-md-1 col-lg-1">PARENTS:	 </span>
 					<br />
+                    <br>
 					<span class="pig-det-label col-xs-1 col-sm-1 col-md-1 col-lg-1">BOAR: </span><span class="pig-det-details col-xs-3 col-sm-3 col-md-3 col-lg-3"><a href="?pig=<?php echo $pig->getBoar($_GET['pig']);?>&location=<?php echo $_GET['location'];?>&pen=<?php echo $_GET['pen'];?>&house=<?php echo $_GET['house'];?>"><?php echo $pig->getBoar($_GET['pig']);?></a></span>
 					<span class="pig-det-label">SOW: </span><span class="pig-det-details"><a href="?pig=<?php echo $pig->getSow($_GET['pig']);?>"><?php echo $pig->getSow($_GET['pig']); ?></a></span>
 					<hr class="details-hr" />
@@ -81,11 +99,11 @@
             <div class="row">
 				<div class="record-container col-xs-3 col-sm-3 col-md-3 col-lg-3">
 					<hr class="details-hr" />
-					<div><a id="movementRecord" class="" href="?pig=<?php echo $_GET['pig'];?>&record=1&location=<?php echo $_GET['location'];?>&pen=<?php echo $_GET['pen'];?>&house=<?php echo $_GET['house'];?>">Movement</a></div>
-					<div><a id="medsRecord" class="" href="?pig=<?php echo $_GET['pig'];?>&record=2&location=<?php echo $_GET['location'];?>&pen=<?php echo $_GET['pen'];?>&house=<?php echo $_GET['house'];?>">Meds</a></div>
-					<div><a id="feedsRecord" class="" href="?pig=<?php echo $_GET['pig'];?>&record=3&location=<?php echo $_GET['location'];?>&pen=<?php echo $_GET['pen'];?>&house=<?php echo $_GET['house'];?>">Feeds</a></div>
-					<div><a id="weightRecord" class="" href="?pig=<?php echo $_GET['pig'];?>&record=4&location=<?php echo $_GET['location'];?>&pen=<?php echo $_GET['pen'];?>&house=<?php echo $_GET['house'];?>">Weight</a></div>
-                    <div><a id="back" style="cursor:pointer;">Back</a></div>
+					<div><a id="movementRecord" class="" href="?pig=<?php echo $_GET['pig'];?>&record=1&location=<?php echo $_GET['location'];?>&pen=<?php echo $_GET['pen'];?>&house=<?php echo $_GET['house'];?>" onmouseover="pop('mvmnt')" onmouseout="hideprompt()">Movement</a></div>
+					<div><a id="medsRecord" class="" href="?pig=<?php echo $_GET['pig'];?>&record=2&location=<?php echo $_GET['location'];?>&pen=<?php echo $_GET['pen'];?>&house=<?php echo $_GET['house'];?>" onmouseover="pop('meds')" onmouseout="hideprompt()">Meds</a></div>
+					<div><a id="feedsRecord" class="" href="?pig=<?php echo $_GET['pig'];?>&record=3&location=<?php echo $_GET['location'];?>&pen=<?php echo $_GET['pen'];?>&house=<?php echo $_GET['house'];?>" onmouseover="pop('feeds')" onmouseout="hideprompt()">Feeds</a></div>
+					<div><a id="weightRecord" class="" href="?pig=<?php echo $_GET['pig'];?>&record=4&location=<?php echo $_GET['location'];?>&pen=<?php echo $_GET['pen'];?>&house=<?php echo $_GET['house'];?>" onmouseover="pop('weight')" onmouseout="hideprompt()">Weight</a></div>
+                    <div><a id="back" style="cursor:pointer;"  onmouseover="pop('back')" onmouseout="hideprompt()">Back</a></div>
 				</div>
 				<div id="record-details" class="record-details col-xs-9 col-sm-9 col-md-9 col-lg-9">
 					<?php
@@ -105,7 +123,9 @@
                                     <label class="control-label col-sm-2 col-md-2 col-lg-2" style="text-align:left;">Currently:</label> 
                                     <label id = "currently" class="control-label col-sm-4 label-default" style = "text-align: center;background-color: white;"> 
                                         <?php 
-                                            echo "<label id='h' style='cursor:pointer;' onmouseover='pop('house')' onmouseout='hideprompt()'> House ";echo $pig->getCurrentHouse($_GET['pig']);echo "</label>"; echo "<label id='p' style='cursor:pointer;' onmouseover='pop(pen)' onmouseout='hideprompt()'> Pen ";echo $pig->getCurrentPen($_GET['pig']);echo "</label>";
+                                        $house = "house";
+                                        $pen = "pen";
+                                            echo "<label id='h' style='cursor:pointer;' onmouseover='pophouse()' onmouseout='hideprompt()'> House ";echo $pig->getCurrentHouse($_GET['pig']);echo "</label>"; echo "<label id='p' style='cursor:pointer;' onmouseover='poppen()' onmouseout='hideprompt()'> Pen ";echo $pig->getCurrentPen($_GET['pig']);echo "</label>";
                                         ?>
                         
                                     </label> 
@@ -118,7 +138,7 @@
                                             $db->getWeekDateMvmnt($_GET['pig'], $first);
                                             $db->getPigMvmnt($_GET['pig']);
                                         ?>
-                                        <button type="button" onclick="drawVisualization()" title="Click this button to view weight details of selected pig." class="btn btn-default btn-sm" id="btnVisualize">Visualize</button> 
+                                        <button type="button" onclick="drawVisualization()" title="Click this button to view weight details of selected pig." class="btn btn-default btn-sm" id="btnVisualize" onmouseover="pop('movement')" onmouseout="hideprompt()">Visualize</button> 
                                     </div> 
                                 </div> 
                             </form> 
@@ -251,14 +271,14 @@
 				
 			</div>
 			
-
+        </div>
 			<div class="page-footer col-xs-12 col-sm-12 col-md-12 col-lg-12">
 				Prototype Pork Traceability System <br> Copyright &copy; 2014 - <?php echo date("Y");?> UPLB  <br>
 				funded by PCAARRD
 			</div>
 			
 			
-		</div>
+		
 		<script src="js/jquery-2.1.4.js" type="text/javascript"></script>
 		<script src="js/jquery-latest.js" type="text/javascript"></script>
 		<script src="js/jquery.min.js" type="text/javascript"></script>
@@ -312,7 +332,7 @@
                     position: "none" 
                 }, 
             }; 
-            var chart = new google.visualization.ColumnChart(document.getElementById("record-details2")); 
+            var chart = new google.visualization.ColumnChart(document.getElementById("record-details")); 
             //$("#columnchart_values").show(); 
             chart.draw(view, options); 
             $("#columnchart_values div").css("z-index","-1"); 
@@ -416,20 +436,88 @@
             });
         </script>
         <script>
-            function pop(sel){
+            function pophouse(){
                 var div = document.getElementById('again');
-
-               if(sel==house){
+               div.style.display ="block";
+                    div.style.position ="absolute";
+                     div.style.marginLeft = "10%";
+                     div.style.marginTop = "4%";
+                     div.style.width = "30%";
+                    div.innerHTML = "Click here to select new house.";       
+            }
+            function poppen(){
+                var div = document.getElementById('again');
+               div.style.display ="block";
+                    div.style.position ="absolute";
+                     div.style.marginLeft = "10%";
+                     div.style.marginTop = "4%";
+                     div.style.width = "30%";
+                    div.innerHTML = "Click here to select new pen.";       
+            }
+            function popinfo(){
+                var div = document.getElementById('again');
                      div.style.display ="block";
                     div.style.position ="absolute";
-                    div.innerHTML = "Click here to select new house.";  
+                    div.style.marginLeft = "80%";
+                    div.style.marginTop = "4%";
+                     div.style.width = "30%";
+                    div.innerHTML = "Click here to view information details of this pig."; 
                 
-               }else if(sel==pen){
+            }
+            function pop(name){
+                var div = document.getElementById('again');
+                if(name=='movement'){
+                    div.style.display ="block";
+                    div.style.position ="absolute";
+                    div.style.marginLeft = "40%";
+                    div.style.marginTop = "4%";
+                     div.style.width = "30%";
+                    div.innerHTML = "Click here to view movement graph."; 
+                }else if(name=='mvmnt'){
                      div.style.display ="block";
                     div.style.position ="absolute";
-                    div.innerHTML = "Click here to select new house.";  
-               }
-                   
+                    div.style.marginLeft = "0%";
+                    div.style.marginTop = "4%";
+                     div.style.width = "30%";
+                    div.innerHTML = "Click here to view movement details."; 
+                }else if(name=='meds'){
+                     div.style.display ="block";
+                    div.style.position ="absolute";
+                    div.style.marginLeft = "0%";
+                    div.style.marginTop = "4%";
+                     div.style.width = "30%";
+                    div.innerHTML = "Click here to view medication details."; 
+                }else if(name=='feeds'){
+                     div.style.display ="block";
+                    div.style.position ="absolute";
+                    div.style.marginLeft = "0%";
+                    div.style.marginTop = "4%";
+                     div.style.width = "30%";
+                    div.innerHTML = "Click here to view feeds details."; 
+                }else if(name=='weight'){
+                     div.style.display ="block";
+                    div.style.position ="absolute";
+                    div.style.marginLeft = "0%";
+                    div.style.marginTop = "4%";
+                     div.style.width = "30%";
+                    div.innerHTML = "Click here to view weight details."; 
+                }else if(name=='back'){
+                     div.style.display ="block";
+                    div.style.position ="absolute";
+                    div.style.marginLeft = "0%";
+                    div.style.marginTop = "4%";
+                     div.style.width = "30%";
+                    div.innerHTML = "Click here to go back to step 1(select a house)."; 
+                }else if(name=='edit_det'){
+                     div.style.display ="block";
+                    div.style.position ="absolute";
+                    div.style.marginLeft = "0";
+                    div.style.marginTop = "-25%";
+                     div.style.width = "30%";
+                    div.innerHTML = "Click here to edit pig details."; 
+                }
+                 
+                     
             }
             function hideprompt(){
                 document.getElementById('again').style.display = 'none';

@@ -6,12 +6,28 @@
 <!DOCTYPE HTML>
 <html lang="en"> 
     <?php
+    session_start();
         require_once "connect.php";
+        if(!isset($_SESSION['username']) || !isset($_SESSION['password']))
+        {
+            header("Location: login.php");
+        }
         
         include "inc/functions.php";
         include "inc/pigdet.php";
         $pig = new pigdet_functions();
         $db = new phpork_functions ();
+         if(isset($_POST['ed_birth'])){
+            $newbirth = $_POST['ed_birth'];
+            $newweight = $_POST['ed_weight'];
+            $newuser = "1";
+            $prevbirth = $pig->getBirthDate($_GET['pig']);
+            $prevweight = $pig->getWeight($_GET['pig']);
+            $prevuser = $pig->getUserEdited($_GET['pig']);
+
+            $db->updatePigDetails($_GET['pig'],$newbirth,$newweight,$newuser);
+            $db->insertEditHistory($prevbirth,$prevweight,$prevuser,$_GET['pig']);
+        }
         
     ?>
     <head>
@@ -30,20 +46,21 @@
             <div class="page-header col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <img class="img-responsive" src="css/images/new_letterhead.png">
             </div>
+            
         <div class="container">
             <div class="row">
                 <?php 
-                        $h = $_GET['house'];
-                        $l = $_GET['location'];
-                        $p = $_GET['pen'];
-                        echo "<input type = 'hidden' value= '$h' name = 'house' id = 'houseid'/>";
-                        echo "<input type = 'hidden' value= '$l' name = 'loc' id = 'locid'/>";
-                        echo "<input type = 'hidden' value= '$p' name = 'pen' id = 'penid'/>";
-                    ?>
+                    $h = $_GET['house'];
+                    $l = $_GET['location'];
+                    $p = $_GET['pen'];
+                    echo "<input type = 'hidden' value= '$h' name = 'house' id = 'houseid'/>";
+                    echo "<input type = 'hidden' value= '$l' name = 'loc' id = 'locid'/>";
+                    echo "<input type = 'hidden' value= '$p' name = 'pen' id = 'penid'/>";
+                ?>
                 <div id="columnchart_values"> 
-                    </div> 
-                    <div id="linechart_values"> 
-                    </div>
+                </div> 
+                <div id="linechart_values"> 
+                </div>
 
                 <div class="pig-det col-xs-3 col-sm-3 col-md-3 col-lg-3">
                     <div class="pig-image col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -53,24 +70,38 @@
                     <span class="col-xs-12 col-sm-12 col-md-12 col-lg-12"><?php echo $pig->getRFID($_GET['pig']);?></span>
                     <span class="col-xs-12 col-sm-12 col-md-12 col-lg-12"><?php echo $pig->getGender($_GET['pig']);?></span>
                     <span class="col-xs-12 col-sm-12 col-md-12 col-lg-12"><?php echo $pig->getBreed($_GET['pig']);?></span>
+                    <span class="col-xs-12 col-sm-12 col-md-12 col-lg-12"><?php echo $pig->getAge($_GET['pig']);?></span>
                 </div>
 
                 <div class="pig-details col-xs-9 col-sm-9 col-md-9 col-lg-9">
-                    <form method="post" action="pigDetails.php?pig=<?php echo $_GET['pig']?>&location=<?php echo $_GET['location'];?>&pen=<?php echo $_GET['pen'];?>&house=<?php echo $_GET['house'];?>">
+                    
+                        
+                        
+                        <form class="form-horizontal col-xs-10 col-sm-10 col-md-10 col-lg-10"  method="post" action="logout.php" style="width:30%;float:right;">
+                            <div class="form-group logout" style="float:right; margin-top:1%;" >
+                                <label class="control-label col-xs-6 col-sm-6" >Current User: </label>
+                                <label class="control-label col-xs-3 col-sm-3 label-default" style="text-align: center; background-color: white; border: 2px solid;"><?php echo $_SESSION['username'];?></label>
+                                <div class="col-xs-1 col-sm-1">
+                                    <input type="submit" class="btn btn-primary btn-sm"/ value="Logout">
+                                </div>
+                            </div>
+                        </form> 
+                        <br><!--  // change '1' to $_SESSION['userid'] -->
                         <hr class="details-hr" />
-                        <span class="pig-det-label col-xs-1 col-sm-1 col-md-1 col-lg-1">FARM: </span> &nbsp; <span class="pig-det-details col-xs-3 col-sm-3 col-md-3 col-lg-3"><input type="text" id="ed_loc" value="<?php echo  $pig->getLocation($_GET['pig']);?>"/></span> &nbsp;
-                        <span class="pig-det-label col-xs-7 col-sm-7 col-md-7 col-lg-7" style="text-align:right;"><a href="edit.php?pig=<?php echo $_GET['pig']?>&location=<?php echo $_GET['location'];?>&pen=<?php echo $_GET['pen'];?>&house=<?php echo $_GET['house'];?>">Save details</a></span>
-
-                        <hr class="details-hr" />
+                        <form method="post" action="edit.php?pig=<?php echo $_GET['pig']?>&location=<?php echo $_GET['location'];?>&pen=<?php echo $_GET['pen'];?>&house=<?php echo $_GET['house'];?>">
+                        <span class="pig-det-label col-xs-1 col-sm-1 col-md-1 col-lg-1">FARM: </span>
+                        <span class="pig-det-details col-xs-2 col-sm-2 col-md-2 col-lg-2"><?php echo  $pig->getLocation($_GET['pig']);?></span>
                         <span class="pig-det-label col-xs-1 col-sm-1 col-md-1 col-lg-1">BIRTH: </span>
-                        <span class="pig-det-details col-xs-3 col-sm-3 col-md-3 col-lg-3"><input type="text" id="ed_birth" value="<?php echo $pig->getBirthDate($_GET['pig']);?>"/></span>
-                        <span class="pig-det-label col-xs-1 col-sm-1 col-md-1 col-lg-1">AGE: </span> 
-                        <span class="pig-det-details col-xs-3 col-sm-3 col-md-3 col-lg-3"><?php echo $pig->getAge($_GET['pig']);?></span>
-                        <span class="pig-det-label">WEIGHT: </span>
-                        <span class="pig-det-details"><input type="text" id="ed_weight" value="<?php echo $pig->getWeight($_GET['pig']);?>"/></span>
+                        <span class="pig-det-details col-xs-3 col-sm-3 col-md-3 col-lg-3"><input type="date" style="width:100%;" id="ed_birth" name="ed_birth" value="<?php echo $pig->getBirthDate($_GET['pig']);?>"/></span>
+                        
+                        <span class="pig-det-label col-xs-1 col-sm-1 col-md-1 col-lg-1">WEIGHT: </span>
+                        <span class="pig-det-details col-xs-2 col-sm-2 col-md-2 col-lg-2"><input type="text" id="ed_weight" name="ed_weight" size ="5" placeholder="<?php echo $pig->getWeight($_GET['pig']);?>"/></span>
+                        <span class="pig-det-label col-xs-2 col-sm-2 col-md-2 col-lg-2" style="text-align:left;"><input type="submit" value="Save details"/></span>
+                        <input type="hidden" name="ed_user" value="<?php echo $_SESSION['user_id']; ?>" /><br>
                         <hr class="details-hr" />
-                        <span class="pig-det-label col-xs-1 col-sm-1 col-md-1 col-lg-1">PARENTS  </span>
+                        <span class="pig-det-label col-xs-1 col-sm-1 col-md-1 col-lg-1">PARENTS:  </span>
                         <br />
+                        <br>
                         <span class="pig-det-label col-xs-1 col-sm-1 col-md-1 col-lg-1">BOAR: </span><span class="pig-det-details col-xs-3 col-sm-3 col-md-3 col-lg-3"><a href="?pig=<?php echo $pig->getBoar($_GET['pig']);?>&location=<?php echo $_GET['location'];?>&pen=<?php echo $_GET['pen'];?>&house=<?php echo $_GET['house'];?>"><?php echo $pig->getBoar($_GET['pig']);?></a></span>
                         <span class="pig-det-label">SOW: </span><span class="pig-det-details"><a href="?pig=<?php echo $pig->getSow($_GET['pig']);?>"><?php echo $pig->getSow($_GET['pig']); ?></a></span>
                         <hr class="details-hr" />
@@ -84,11 +115,11 @@
             <div class="row">
                 <div class="record-container col-xs-3 col-sm-3 col-md-3 col-lg-3">
                     <hr class="details-hr" />
-                    <div><a id="movementRecord" class="" href="?pig=<?php echo $_GET['pig'];?>&record=1&location=<?php echo $_GET['location'];?>&pen=<?php echo $_GET['pen'];?>&house=<?php echo $_GET['house'];?>">Movement</a></div>
-                    <div><a id="medsRecord" class="" href="?pig=<?php echo $_GET['pig'];?>&record=2&location=<?php echo $_GET['location'];?>&pen=<?php echo $_GET['pen'];?>&house=<?php echo $_GET['house'];?>">Meds</a></div>
-                    <div><a id="feedsRecord" class="" href="?pig=<?php echo $_GET['pig'];?>&record=3&location=<?php echo $_GET['location'];?>&pen=<?php echo $_GET['pen'];?>&house=<?php echo $_GET['house'];?>">Feeds</a></div>
-                    <div><a id="weightRecord" class="" href="?pig=<?php echo $_GET['pig'];?>&record=4&location=<?php echo $_GET['location'];?>&pen=<?php echo $_GET['pen'];?>&house=<?php echo $_GET['house'];?>">Weight</a></div>
-                    <div><a id="back" style="cursor:pointer;">Back</a></div>
+                    <div><a id="movementRecord" class="" href="?pig=<?php echo $_GET['pig'];?>&record=1&location=<?php echo $_GET['location'];?>&pen=<?php echo $_GET['pen'];?>&house=<?php echo $_GET['house'];?>" onmouseover="pop('mvmnt')" onmouseout="hideprompt()">Movement</a></div>
+                    <div><a id="medsRecord" class="" href="?pig=<?php echo $_GET['pig'];?>&record=2&location=<?php echo $_GET['location'];?>&pen=<?php echo $_GET['pen'];?>&house=<?php echo $_GET['house'];?>" onmouseover="pop('meds')" onmouseout="hideprompt()">Meds</a></div>
+                    <div><a id="feedsRecord" class="" href="?pig=<?php echo $_GET['pig'];?>&record=3&location=<?php echo $_GET['location'];?>&pen=<?php echo $_GET['pen'];?>&house=<?php echo $_GET['house'];?>" onmouseover="pop('feeds')" onmouseout="hideprompt()">Feeds</a></div>
+                    <div><a id="weightRecord" class="" href="?pig=<?php echo $_GET['pig'];?>&record=4&location=<?php echo $_GET['location'];?>&pen=<?php echo $_GET['pen'];?>&house=<?php echo $_GET['house'];?>" onmouseover="pop('weight')" onmouseout="hideprompt()">Weight</a></div>
+                    <div><a id="back" href="pigDetails.php?pig=<?php echo $_GET['pig'];?>&location=<?php echo $_GET['location'];?>&pen=<?php echo $_GET['pen'];?>&house=<?php echo $_GET['house'];?>" style="cursor:pointer;">Back</a></div>
                 </div>
                 <div id="record-details" class="record-details col-xs-9 col-sm-9 col-md-9 col-lg-9">
                     <?php
@@ -108,7 +139,7 @@
                                     <label class="control-label col-sm-2 col-md-2 col-lg-2" style="text-align:left;">Currently:</label> 
                                     <label id = "currently" class="control-label col-sm-4 label-default" style = "text-align: center;background-color: white;"> 
                                         <?php 
-                                            echo "<label id='h' style='cursor:pointer;' onmouseover='pop('house')' onmouseout='hideprompt()'> House ";echo $pig->getCurrentHouse($_GET['pig']);echo "</label>"; echo "<label id='p' style='cursor:pointer;' onmouseover='pop(pen)' onmouseout='hideprompt()'> Pen ";echo $pig->getCurrentPen($_GET['pig']);echo "</label>";
+                                            echo "<label id='h' style='cursor:pointer;' onmouseover='pophouse()' onmouseout='hideprompt()'> House ";echo $pig->getCurrentHouse($_GET['pig']);echo "</label>"; echo "<label id='p' style='cursor:pointer;' onmouseover='poppen()' onmouseout='hideprompt()'> Pen ";echo $pig->getCurrentPen($_GET['pig']);echo "</label>";
                                         ?>
                         
                                     </label> 
@@ -137,7 +168,7 @@
                                     </thead> 
                                     <tbody id = "data">
                                         <?php
-                                            $pig->ddl_locations_edit($_GET['pig']);
+                                            $pig->ddl_locations($_GET['pig']);
                                         ?>
                        
                                     </tbody>
@@ -185,11 +216,13 @@
                                         <tr> 
                                             <th>Medication Name</th> 
                                             <th>Medication Type</th> 
+                                            <th>Edit to</th> 
+                                            <th>Action</th> 
                                         </tr> 
                                     </thead> 
                                     <tbody id = "data">
                                         <?php
-                                            $pig->ddl_medRecord($_GET['pig']);
+                                            $pig->ddl_medRecordEdit($_GET['pig']);
                                         ?>
                        
                                     </tbody>
@@ -221,11 +254,13 @@
                                             <th>Feed Name</th> 
                                             <th>Feed Type</th> 
                                             <th>Production Date</th> 
+                                            <th>Edit to</th> 
+                                            <th>Action</th> 
                                         </tr> 
                                     </thead> 
                                     <tbody id = "data">
                                         <?php
-                                            $pig->ddl_feedRecord($_GET['pig']);
+                                            $pig->ddl_feedRecordEdit($_GET['pig']);
                                         ?>
                        
                                     </tbody>
@@ -270,13 +305,6 @@
         <script src="js/javascript.js"></script>
         <script src="js/jquery.min-1.js"></script>
         <script type="text/javascript" src="js/jsapi.js"></script>
-        <script type="text/javascript">
-
-            $(document).ready(function () {
-              //your code here
-                
-            });
-        </script>
          <script type="text/javascript"> 
         google.load('visualization', '1', {
             packages: ['corechart', 'bar']
@@ -314,9 +342,9 @@
                 }, 
                 legend: { 
                     position: "none" 
-                }, 
+                }
             }; 
-            var chart = new google.visualization.ColumnChart(document.getElementById("record-details2")); 
+            var chart = new google.visualization.ColumnChart(document.getElementById("record-details")); 
             //$("#columnchart_values").show(); 
             chart.draw(view, options); 
             $("#columnchart_values div").css("z-index","-1"); 
@@ -420,23 +448,115 @@
             });
         </script>
         <script>
-            function pop(sel){
+             function pophouse(){
                 var div = document.getElementById('again');
-
-               if(sel==house){
+                    div.style.display ="block";
+                    div.style.position ="absolute";
+                     div.style.marginLeft = "10%";
+                     div.style.marginTop = "4%";
+                     div.style.width = "30%";
+                    div.innerHTML = "Click here to select new house.";       
+            }
+            function poppen(){
+                var div = document.getElementById('again');
+               div.style.display ="block";
+                    div.style.position ="absolute";
+                     div.style.marginLeft = "10%";
+                     div.style.marginTop = "4%";
+                     div.style.width = "30%";
+                    div.innerHTML = "Click here to select new pen.";       
+            }
+            function popinfo(){
+                var div = document.getElementById('again');
                      div.style.display ="block";
                     div.style.position ="absolute";
-                    div.innerHTML = "Click here to select new house.";  
+                    div.style.marginLeft = "80%";
+                    div.style.marginTop = "4%";
+                     div.style.width = "30%";
+                    div.innerHTML = "Click here to view information details of this pig."; 
                 
-               }else if(sel==pen){
+            }
+            function pop(name){
+                var div = document.getElementById('again');
+                if(name=='movement'){
+                    div.style.display ="block";
+                    div.style.position ="absolute";
+                    div.style.marginLeft = "40%";
+                    div.style.marginTop = "4%";
+                     div.style.width = "30%";
+                    div.innerHTML = "Click here to view movement graph."; 
+                }else if(name=='mvmnt'){
                      div.style.display ="block";
                     div.style.position ="absolute";
-                    div.innerHTML = "Click here to select new house.";  
-               }
-                   
+                    div.style.marginLeft = "0%";
+                    div.style.marginTop = "4%";
+                     div.style.width = "30%";
+                    div.innerHTML = "Click here to view movement details."; 
+                }else if(name=='meds'){
+                     div.style.display ="block";
+                    div.style.position ="absolute";
+                    div.style.marginLeft = "0%";
+                    div.style.marginTop = "4%";
+                     div.style.width = "30%";
+                    div.innerHTML = "Click here to edit medication details."; 
+                }else if(name=='feeds'){
+                     div.style.display ="block";
+                    div.style.position ="absolute";
+                    div.style.marginLeft = "0%";
+                    div.style.marginTop = "4%";
+                     div.style.width = "30%";
+                    div.innerHTML = "Click here to edit feeds details."; 
+                }else if(name=='weight'){
+                     div.style.display ="block";
+                    div.style.position ="absolute";
+                    div.style.marginLeft = "0%";
+                    div.style.marginTop = "4%";
+                     div.style.width = "30%";
+                    div.innerHTML = "Click here to view weight details."; 
+                }else if(name=='back'){
+                     div.style.display ="block";
+                    div.style.position ="absolute";
+                    div.style.marginLeft = "0%";
+                    div.style.marginTop = "4%";
+                     div.style.width = "30%";
+                    div.innerHTML = "Click here to go back to step 1(select a house)."; 
+                }else if(name=='save_det'){
+                     div.style.display ="block";
+                    div.style.position ="absolute";
+                    div.style.marginLeft = "0";
+                    div.style.marginTop = "-25%";
+                     div.style.width = "30%";
+                    div.innerHTML = "Click here to save pig details."; 
+                }
+                 
+                     
             }
             function hideprompt(){
                 document.getElementById('again').style.display = 'none';
+            }
+            function updateMR(mrid){
+
+                $.ajax({
+                    url: 'updateMRGateway.php?medid='+$('#ed_medication'+mrid).val()+'&mrid='+mrid,
+                    dataType: "json", 
+                    succcess: function(data){
+                        alert("Successfully updated");
+                    }
+                });
+
+                location.reload();
+            }
+            function updateFR(frid){
+
+                $.ajax({
+                    url: 'updateFRGateway.php?fid='+$('#ed_feeds'+frid).val()+'&frid='+frid,
+                    dataType: "json", 
+                    succcess: function(data){
+                        alert("Successfully updated");
+                    }
+                });
+
+                location.reload();
             }
         </script>
     </body>

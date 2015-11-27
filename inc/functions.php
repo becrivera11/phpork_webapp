@@ -301,4 +301,99 @@ class phpork_functions {
 			echo "<input type = 'text' class = 'form-control' name = 'medtypeText' disabled  value='$row[0]'>";
 		
 	}
+
+	public function updatePigDetails($pig_id,$birth,$weight,$user){
+		$link = $this->connect();
+		$query = "UPDATE pig
+					set birth_date = '".$birth."',
+					user = '".$user."'
+					WHERE pig_id = '".$pig_id."'";
+		$result = mysqli_query($link, $query);
+		date_default_timezone_set("Asia/Manila");
+		$d = date("Y-m-d");
+		$t = date("h:i:s");
+		$query = "INSERT INTO weight_record(record_date,record_time,weight,pig_id) values('".$d."','".$t."','".$weight."','".$pig_id."');";
+		
+		$result = mysqli_query($link, $query);
+		
+	}
+	public function insertEditHistory($birth,$weight,$user,$pig_id){
+		$link = $this->connect();
+		$query = "INSERT INTO edit_history(pig_id,birth,weight,user) values('".$pig_id."','".$birth."','".$weight."','".$user."');";
+		
+		$result = mysqli_query($link, $query);
+	}
+	public function insertMedEditHistory($medid,$user,$mrid){
+		$link = $this->connect();
+		$query = "INSERT INTO med_edit_history(mr_id,med_id,user) values('".$mrid."','".$medid."','".$user."');";
+		
+		$result = mysqli_query($link, $query);
+	}
+	public function insertFeedsEditHistory($medid,$user,$mrid){
+		$link = $this->connect();
+		$query = "INSERT INTO feeds_edit_history(fr_id,feed_id,user) values('".$mrid."','".$medid."','".$user."');";
+		
+		$result = mysqli_query($link, $query);
+	}
+
+	public function viewEditHistoryOfPig($pig_id){
+		$link = $this->connect();
+		$query = " SELECT pig_id,birth,weight,user from edit_history ORDER BY edit_date DESC ";
+		$result = mysqli_query($link, $query);
+		print"<table>
+				<th>Birth Date</th>
+				<th>Weight</th>
+				<th>Updated By</th>
+			";
+		while($row = mysqli_fetch_row($result)){
+			print "<tr>";
+			print "<td>".$row[1]."</td>";
+			print "<td>".$row[2]."</td>";
+			print "<td>".$row[3]."</td>";
+			print "</tr>";
+		}
+		print "</table>";
+
+			
+	}
+
+	public function updateMeds($med_id,$mrid,$user){
+		$link = $this->connect();
+		$query2 = "SELECT med_id
+				FROM med_record
+				WHERE mr_id='".$mrid."'";
+		$result2 = mysqli_query($link, $query2);
+		$row = mysqli_fetch_row($result2);
+		$query = "UPDATE med_record
+					set med_id = '".$med_id."'
+					WHERE mr_id = '".$mrid."'";
+		$result = mysqli_query($link, $query);
+		if($result){
+			$this->insertMedEditHistory($row[0],$user,$mrid);
+			return array('success' => '1');
+		}else{
+			return array('success' => '0');
+		}
+	}
+
+	public function updateFeeds($fid,$ftid,$user){
+		$link = $this->connect();
+		$query2 = "SELECT feed_id
+				FROM feed_transaction
+				WHERE ft_id='".$ftid."'";
+		$result2 = mysqli_query($link, $query2);
+		$row = mysqli_fetch_row($result2);
+		$query = "UPDATE feed_transaction
+					set feed_id = '".$fid."'
+					WHERE ft_id = '".$ftid."'";
+		$result = mysqli_query($link, $query);
+		if($result){
+			$this->insertFeedsEditHistory($row[0],$user,$ftid);
+			return array('success' => '1');
+		}else{
+			return array('success' => '0');
+		}
+	}
+
+
 }

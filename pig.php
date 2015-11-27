@@ -6,7 +6,12 @@
 <!DOCTYPE HTML>
 <html lang="en"> 
 	<?php
+		session_start();
 		require_once "connect.php";
+		if(!isset($_SESSION['username']) || !isset($_SESSION['password']))
+		{
+		  	header("Location: login.php");
+		}
 		
 		include "inc/functions.php";
 		$db = new phpork_functions ();
@@ -28,6 +33,15 @@
 			<div class="page-header">
 				<img class="img-responsive" src="css/images/letterhead.png">
 			</div>
+			<form class="form-horizontal" class="logout" method="post" action="logout.php" style="width:30%; margin:0 0 0 70%;">
+					<div class="form-group" >
+						<label class="control-label col-xs-4 col-sm-4" >Current User: </label>
+						<label class="control-label col-xs-2 col-sm-2 label-default" style="text-align: center; background-color: white; border: 2px solid;"><?php echo $_SESSION['username'];?></label>
+						<div class="col-xs-2 col-sm-2">
+							<button type="submit" class="btn btn-primary btn-sm">Logout</button>
+						</div>
+					</div>
+				</form>
 			<div class="row">
 				<div class="content" >
 					<ul class="step-indicator">

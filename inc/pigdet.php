@@ -99,13 +99,18 @@ class pigdet_functions {
 	public function getWeight($pigid){
 		$link = $this->connect();
 
-		$query = "SELECT weight,
-						min(record_date)
+		$query = "SELECT max(record_date)
 				FROM weight_record
 				WHERE pig_id = '".$pigid."'";
 		$result = mysqli_query($link,$query);
 		$row = mysqli_fetch_row($result);
-		return $row[0];
+		$query2 = "SELECT weight
+				FROM weight_record
+				WHERE pig_id = '".$pigid."'
+				AND record_date = '".$row[0]."'";
+		$result2 = mysqli_query($link,$query2);
+		$row2 = mysqli_fetch_row($result2);
+		return $row2[0];
 	}
 	public function getBoar($pigid){
 		$link = $this->connect();
@@ -115,7 +120,14 @@ class pigdet_functions {
 				WHERE pig_id = '".$pigid."'";
 		$result = mysqli_query($link,$query);
 		$row = mysqli_fetch_row($result);
-		return $row[0];
+		$query2 = "SELECT rt.label 
+					FROM rfid_tags rt
+					INNER JOIN pig p ON
+					p.pig_id = rt.pig_id
+					WHERE p.pig_id = '".$row[0]."'";
+		$result2 = mysqli_query($link,$query2);
+		$row2 = mysqli_fetch_row($result2);
+		return $row2[0];
 	}
 	public function getSow($pigid){
 		$link = $this->connect();
@@ -125,7 +137,14 @@ class pigdet_functions {
 				WHERE pig_id = '".$pigid."'";
 		$result = mysqli_query($link,$query);
 		$row = mysqli_fetch_row($result);
-		return $row[0];
+		$query2 = "SELECT rt.label 
+					FROM rfid_tags rt
+					INNER JOIN pig p ON
+					p.pig_id = rt.pig_id
+					WHERE p.pig_id = '".$row[0]."'";
+		$result2 = mysqli_query($link,$query2);
+		$row2 = mysqli_fetch_row($result2);
+		return $row2[0];
 	}
 	public function getFosterSow($pigid){  //foster
 		$link = $this->connect();
@@ -218,11 +237,52 @@ class pigdet_functions {
 			echo "<tr><td><input type='date' value='$row[0]' name='d_moved'/></td> <td><input type='text' value='$row[1]' size='8' name='t_moved'/></td> <td>Pen <input type='text' value='$row[2]' size = '4' name='l_moved'/></td></tr> ";
 		}
 	}
+	public function ddl_feedRecordEdit($pig){
+		$link = $this->connect();
+		$query = "SELECT f.feed_name,
+						f.feed_type,
+						f.prod_date,
+						ft.ft_id
+				FROM feeds f
+				INNER JOIN feed_transaction ft ON
+					ft.feed_id = f.feed_id
+				WHERE ft.pig_id = '".$pig."'";
+		$result = mysqli_query($link,$query);
+		while($row = mysqli_fetch_row($result)){
+			echo "<tr>
+					<td>$row[0]</td>
+					<td>$row[1]</td>
+					<td>$row[2]</td>
+					<td><select id='ed_feeds".$row[3]."'>".$this->ddl_feeds()."</select></td>
+					<td><button type=button onclick='updateFR(".$row[3].");'>Edit</button></td>
+				</tr>";
+		}
+	}
+	public function ddl_medRecordEdit($pig){
+		$link = $this->connect();
+		$query = "SELECT m.med_name,
+						m.med_type,
+						mr.mr_id
+				FROM medication m 
+				INNER JOIN med_record mr ON
+					mr.med_id = m.med_id
+				WHERE mr.pig_id = '".$pig."'";
+		$result = mysqli_query($link,$query);
+		while($row = mysqli_fetch_row($result)){
+			echo "<tr>
+					<td>$row[0]</td>
+					<td>$row[1]</td>
+					<td><select id='ed_medication".$row[2]."'>".$this->ddl_medications()."</select></td>
+					<td><button type=button onclick='updateMR(".$row[2].");'>Edit</button></td>
+				</tr>";
+		}
+	}
 	public function ddl_feedRecord($pig){
 		$link = $this->connect();
 		$query = "SELECT f.feed_name,
 						f.feed_type,
-						f.prod_date
+						f.prod_date,
+						ft.ft_id
 				FROM feeds f
 				INNER JOIN feed_transaction ft ON
 					ft.feed_id = f.feed_id
@@ -239,7 +299,8 @@ class pigdet_functions {
 	public function ddl_medRecord($pig){
 		$link = $this->connect();
 		$query = "SELECT m.med_name,
-						m.med_type
+						m.med_type,
+						mr.mr_id
 				FROM medication m 
 				INNER JOIN med_record mr ON
 					mr.med_id = m.med_id
@@ -267,15 +328,55 @@ class pigdet_functions {
 				AND p.pig_id != $pig 
 				AND h.house_id = $house";
 		$result = mysqli_query($link,$query);
+		$info = "info";
 		while($row = mysqli_fetch_row($result)){
 			echo "<form method='get' ><tr>
 					<td>$row[0] <input type='hidden' name = 'pig' class='pig' value='$row[1]'/><br>
 					<input type='hidden' name = 'pen' class='pen' value='$pen'/><br>
 					<input type='hidden' name = 'location' class='location' value='$location'/><br>
 					<input type='hidden' name = 'house' class='house' value='$house'/></td>
-					<td><input type='submit' class='infoBtn' value='Info'></td>
+					<td><input type='submit' class='infoBtn' value='Info'  onmouseover='popinfo()' onmouseout='hideprompt()'></td>
 				</tr>
 				</form>";
 		}
 	}
+	public function ddl_medications(){
+		$link = $this->connect();
+
+		$query = "SELECT med_id,
+						med_name,
+						med_type
+				FROM medication";
+		$result = mysqli_query($link,$query);
+		$ret = "";
+		while($row = mysqli_fetch_row($result)){
+			$ret = $ret. "<option value='".$row[0]."'>".$row[1]."</option>";
+		}
+		return $ret;
+	}
+	public function ddl_feeds(){
+		$link = $this->connect();
+
+		$query = "SELECT feed_id,
+						feed_name,
+						feed_type
+				FROM feeds";
+		$result = mysqli_query($link,$query);
+		$ret = "";
+		while($row = mysqli_fetch_row($result)){
+			$ret = $ret. "<option value='".$row[0]."'>".$row[1]."</option>";
+		}
+		return $ret;
+	}
+	public function getUserEdited($pigid){
+		$link = $this->connect();
+
+		$query = "SELECT user
+				FROM pig
+				WHERE pig_id = '".$pigid."'";
+		$result = mysqli_query($link,$query);
+		$row = mysqli_fetch_row($result);
+		return $row[0];
+	}
+
 }
